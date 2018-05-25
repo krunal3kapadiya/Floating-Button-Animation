@@ -1,5 +1,5 @@
 # Floating-Button-Animation [![Build Status](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation.svg?branch=master)](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation)
-Demo app for https://www.uplabs.com/posts/floating-button-animation
+Credits [Srikant](https://www.uplabs.com/srikantshetty91)
 
 <img src="/demo.gif" width="350">
 
