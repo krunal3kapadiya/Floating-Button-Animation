@@ -1,4 +1,4 @@
-# Floating-Button-Animation [![Build Status](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation.svg?branch=master)](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation)
+# Floating-Button-Animation [![Build Status](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation.svg?branch=master)](https://travis-ci.org/krunal3kapadiya/Floating-Button-Animation) [![codecov](https://codecov.io/gh/krunal3kapadiya/Floating-Button-Animation/branch/master/graph/badge.svg)](https://codecov.io/gh/krunal3kapadiya/Floating-Button-Animation)
 Credits [Srikant](https://www.uplabs.com/srikantshetty91)
 
 <img src="/demo.gif" width="350">
