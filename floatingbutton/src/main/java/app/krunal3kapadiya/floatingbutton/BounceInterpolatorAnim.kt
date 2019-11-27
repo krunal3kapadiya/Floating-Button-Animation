@@ -1,4 +1,4 @@
-package com.krunal3kapadiya.floatingbutton
+package app.krunal3kapadiya.floatingbutton
 
 internal class BounceInterpolatorAnim(amplitude: Double, frequency: Double) : android.view.animation.Interpolator {
     private var mAmplitude = 1.0

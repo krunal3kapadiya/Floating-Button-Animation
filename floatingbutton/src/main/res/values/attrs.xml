@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="FloatingButtonAnimation">
+    <declare-styleable name="FloatingButton">
         <attr name="addId" format="integer" />
     </declare-styleable>
 </resources>

@@ -1,4 +1,4 @@
-package com.krunal3kapadiya.floatingbutton
+package app.krunal3kapadiya.floatingbutton
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -6,16 +6,21 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.ArrayList
 
-class FloatingButtonAnimation : FrameLayout {
+/**
+ * @author Krunal Kapadiya (krunal3kapadiya)
+ *
+ */
+
+class FloatingButton : FrameLayout {
     private var floatingActionButton: FloatingActionButton? = null
     private val iconArrayList = ArrayList<Int>()
     private val buttonList = ArrayList<View>()
@@ -35,7 +40,9 @@ class FloatingButtonAnimation : FrameLayout {
 
         floatingActionButton!!.setOnClickListener(OnClickListener {
             addAnimation(floatingActionButton!!)
-            floatingActionButton!!.setImageDrawable(if (isExpanded) ContextCompat.getDrawable(context, R.mipmap.ic_more_hor) else ContextCompat.getDrawable(context, R.mipmap.ic_clear))
+            floatingActionButton!!.setImageDrawable(
+                    if (isExpanded) ContextCompat.getDrawable(context, R.mipmap.ic_more_hor)
+                    else ContextCompat.getDrawable(context, R.mipmap.ic_clear))
             if (isExpanded) {
                 if (buttonList.isEmpty())
                     return@OnClickListener
@@ -54,15 +61,19 @@ class FloatingButtonAnimation : FrameLayout {
 
                 for (i in iconArrayList.indices) {
                     val floatingActionButton = FloatingActionButton(context)
-                    val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                    val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
-                    floatingActionButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimaryLight))
+                    floatingActionButton.backgroundTintList = ColorStateList.valueOf(
+                            ContextCompat
+                                    .getColor(context, R.color.colorPrimaryLight))
                     floatingActionButton.setImageDrawable(ContextCompat.getDrawable(context, iconArrayList[i]))
                     floatingActionButton.layoutParams = layoutParams
 
                     addView(floatingActionButton)
 
-                    //                        final ObjectAnimator alphaAnimation = ObjectAnimator.ofFloat(floatingActionButton, "alpha", 0.3f);
+                    var alphaAnimation: ObjectAnimator = ObjectAnimator.ofFloat(floatingActionButton,
+                            "alpha",
+                            0.3f)
 
                     buttonList.add(floatingActionButton)
                 }
@@ -117,8 +128,8 @@ class FloatingButtonAnimation : FrameLayout {
 
             val scaleDownX = ObjectAnimator.ofFloat(button, "scaleX", 0.1f, 1f)
             val scaleDownY = ObjectAnimator.ofFloat(button, "scaleY", 0.1f, 1f)
-            scaleDownX.duration = 2000
-            scaleDownY.duration = 2000
+            scaleDownX.duration = 1500
+            scaleDownY.duration = 1500
 
             val animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
             val interpolator = BounceInterpolatorAnim(0.1, 10.0)
@@ -141,7 +152,7 @@ class FloatingButtonAnimation : FrameLayout {
 
     private fun addInitialButton(context: Context) {
         floatingActionButton = FloatingActionButton(context)
-        val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         layoutParams.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
         layoutParams.bottomMargin = 100
         floatingActionButton!!.layoutParams = layoutParams
