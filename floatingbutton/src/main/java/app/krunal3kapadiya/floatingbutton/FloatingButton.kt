@@ -9,13 +9,15 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.ArrayList
+import java.util.*
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
 
 /**
@@ -40,7 +42,8 @@ class FloatingButton : FrameLayout {
         //add main button
         addInitialButton(context)
         floatingActionButton!!.setOnClickListener(OnClickListener {
-            //            addAnimation(floatingActionButton!!)
+            //adding scaling animation
+//            addAnimation(floatingActionButton!!)
             floatingActionButton!!.setImageDrawable(
                     if (isExpanded) ContextCompat.getDrawable(context, R.mipmap.ic_more_hor)
                     else ContextCompat.getDrawable(context, R.mipmap.ic_clear))
@@ -50,9 +53,9 @@ class FloatingButton : FrameLayout {
                     return@OnClickListener
                 for (i in buttonList.indices) {
                     addRemoveAnimation(buttonList[i])
-//                    removeView(buttonList[i])
+                    removeView(buttonList[i])
                 }
-//                buttonList.clear()
+                buttonList.clear()
             } else {
                 // if FAB is close, next create new buttons
                 val centerX = floatingActionButton!!.x
@@ -125,11 +128,11 @@ class FloatingButton : FrameLayout {
     private fun offsetAndScaleButtons(centerX: Float, centerY: Float, angleStep: Float, offset: Float, scale: Float) {
         var i = 0
         val cnt = iconArrayList.size
+        var constant = (90 - 90.toDouble().pow((1 / (iconArrayList.size + 1)).toDouble()))
         while (i < cnt) {
-            val angle = angleStep * i - 160
-            val x = cos(Math.toRadians(angle.toDouble())).toFloat() * offset
-            val y = sin(Math.toRadians(angle.toDouble())).toFloat() * offset
-
+            val angle = angleStep * i - constant
+            val x = cos(Math.toRadians(angle)).toFloat() * offset
+            val y = sin(Math.toRadians(angle)).toFloat() * offset
             val button = buttonList[i]
             button.x = centerX + x
             button.y = centerY + y
@@ -161,15 +164,25 @@ class FloatingButton : FrameLayout {
             scaleDownX.duration = 1500
             scaleDownY.duration = 1500
 
-            val animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
-            val interpolator = BounceInterpolatorAnim(0.1, 10.0)
-            animation.interpolator = interpolator
+//            val animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
+//            val interpolator = BounceInterpolatorAnim(0.1, 10.0)
+//            animation.interpolator = interpolator
+//            button.startAnimation(animation)
 
             buttonAnimator.play(buttonAnimatorX).with(buttonAnimatorY).with(scaleDownX).with(scaleDownY)/*.with(buttonSizeAnimator)*/
             buttonAnimator.start()
             i++
         }
     }
+
+
+    private fun addAnimation(view: View) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
+        val interpolator = BounceInterpolatorAnim(0.1, 10.0)
+        animation.interpolator = interpolator
+        view.startAnimation(animation)
+    }
+
 
     private fun addInitialButton(context: Context) {
         floatingActionButton = FloatingActionButton(context)
