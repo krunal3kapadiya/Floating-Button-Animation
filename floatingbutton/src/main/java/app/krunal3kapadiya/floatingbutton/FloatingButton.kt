@@ -11,9 +11,12 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.ArrayList
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * @author Krunal Kapadiya (krunal3kapadiya)
@@ -24,36 +27,34 @@ class FloatingButton : FrameLayout {
     private var floatingActionButton: FloatingActionButton? = null
     private val iconArrayList = ArrayList<Int>()
     private val buttonList = ArrayList<View>()
-
+    private val clickListenerArray = ArrayList<OnClickListener>()
     private var isExpanded = false
+    var pos: Int = 0
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-
         setWillNotDraw(true)
         clipChildren = false
         clipToPadding = false
-
         //add main button
         addInitialButton(context)
-
         floatingActionButton!!.setOnClickListener(OnClickListener {
-            addAnimation(floatingActionButton!!)
+            //            addAnimation(floatingActionButton!!)
             floatingActionButton!!.setImageDrawable(
                     if (isExpanded) ContextCompat.getDrawable(context, R.mipmap.ic_more_hor)
                     else ContextCompat.getDrawable(context, R.mipmap.ic_clear))
             if (isExpanded) {
+                // if FAB is open
                 if (buttonList.isEmpty())
                     return@OnClickListener
                 for (i in buttonList.indices) {
-                    //                        addAnimation(buttonList.get(i));
-
-                    removeView(buttonList[i])
+                    addRemoveAnimation(buttonList[i])
+//                    removeView(buttonList[i])
                 }
-                buttonList.clear()
+//                buttonList.clear()
             } else {
-
+                // if FAB is close, next create new buttons
                 val centerX = floatingActionButton!!.x
                 val centerY = floatingActionButton!!.y
                 val buttonsCount = iconArrayList.size
@@ -70,6 +71,7 @@ class FloatingButton : FrameLayout {
                     floatingActionButton.layoutParams = layoutParams
 
                     addView(floatingActionButton)
+                    floatingActionButton.setOnClickListener(clickListenerArray[i])
 
                     var alphaAnimation: ObjectAnimator = ObjectAnimator.ofFloat(floatingActionButton,
                             "alpha",
@@ -81,6 +83,34 @@ class FloatingButton : FrameLayout {
             }
             isExpanded = !isExpanded
         })
+    }
+
+    private fun addRemoveAnimation(view: View) {
+        val buttonAnimator = AnimatorSet()
+        val buttonAnimatorX = ValueAnimator.ofFloat(floatingActionButton!!.x + floatingActionButton!!.size,
+                view.x)
+        buttonAnimatorX.addUpdateListener { animation ->
+            view.x = animation.animatedValue as Float - view.layoutParams.width / 2
+            view.requestLayout()
+        }
+        buttonAnimatorX.duration = 1900
+
+        val buttonAnimatorY = ValueAnimator.ofFloat(floatingActionButton!!.y + floatingActionButton!!.size,
+                view.y)
+        buttonAnimatorY.addUpdateListener { animation ->
+            view.y = animation.animatedValue as Float
+            view.requestLayout()
+        }
+        buttonAnimatorY.duration = 1900
+
+
+        val scaleDownX = ObjectAnimator.ofFloat(view, "scaleX", 0.1f, 1f)
+        val scaleDownY = ObjectAnimator.ofFloat(view, "scaleY", 0.1f, 1f)
+        scaleDownX.duration = 1500
+        scaleDownY.duration = 1500
+
+        buttonAnimator.play(buttonAnimatorX).with(buttonAnimatorY).with(scaleDownX).with(scaleDownY)/*.with(buttonSizeAnimator)*/
+        buttonAnimator.start()
     }
 
     /**
@@ -97,8 +127,8 @@ class FloatingButton : FrameLayout {
         val cnt = iconArrayList.size
         while (i < cnt) {
             val angle = angleStep * i - 160
-            val x = Math.cos(Math.toRadians(angle.toDouble())).toFloat() * offset
-            val y = Math.sin(Math.toRadians(angle.toDouble())).toFloat() * offset
+            val x = cos(Math.toRadians(angle.toDouble())).toFloat() * offset
+            val y = sin(Math.toRadians(angle.toDouble())).toFloat() * offset
 
             val button = buttonList[i]
             button.x = centerX + x
@@ -141,15 +171,6 @@ class FloatingButton : FrameLayout {
         }
     }
 
-
-    private fun addAnimation(view: View) {
-        val animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
-        val interpolator = BounceInterpolatorAnim(0.1, 10.0)
-        animation.interpolator = interpolator
-        view.startAnimation(animation)
-    }
-
-
     private fun addInitialButton(context: Context) {
         floatingActionButton = FloatingActionButton(context)
         val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -160,8 +181,16 @@ class FloatingButton : FrameLayout {
         addView(floatingActionButton)
     }
 
+    fun addViewIcon(icon: Int, onClickListener: OnClickListener) {
+        iconArrayList.add(icon)
+        clickListenerArray.add(onClickListener)
+    }
+
     fun addViewIcon(icon: Int) {
         iconArrayList.add(icon)
+        clickListenerArray.add(OnClickListener {
+            Toast.makeText(context, "Set Action For Button", Toast.LENGTH_LONG).show()
+        })
     }
 
     fun setImageDrawable(imageDrawable: Drawable) {

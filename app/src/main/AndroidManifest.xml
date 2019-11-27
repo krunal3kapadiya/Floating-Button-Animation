@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.krunal3kapadiya.floatingbutton">
+          package="app.krunal3kapadiya.floatingbuttonsample">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name="app.krunal3kapadiya.floatingbuttonsample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
